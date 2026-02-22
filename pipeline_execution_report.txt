@@ -1,0 +1,35 @@
+PIPELINE EXECUTION REPORT
+==================================================
+Timestamp: 2026-02-22 01:29:55
+Duration : 0.05 seconds
+
+STEPS COMPLETED:
+  1. [OK] Data loaded: customers_raw.csv
+       Detail: 15 rows, 10 columns
+  2. [OK] Quality profiling complete: data_quality_report.txt
+       Detail: 13 quality issues found
+  3. [OK] PII detection complete: pii_detection_report.txt
+       Detail: Emails: 15, Phones: 15, Addresses: 13, DOBs: 14
+  4. [OK] Validation complete: validation_results.txt
+       Detail: 14 failures in 10 rows
+  5. [OK] Data cleaning complete: cleaning_log.txt, customers_cleaned.csv
+       Detail: 14 rows after cleaning
+  6. [OK] PII masking complete: masked_sample.txt, customers_masked.csv
+       Detail: All PII columns masked
+
+FILES GENERATED:
+  - data_quality_report.txt [OK]
+  - pii_detection_report.txt [OK]
+  - validation_results.txt [OK]
+  - cleaning_log.txt [OK]
+  - masked_sample.txt [OK]
+  - customers_cleaned.csv [OK]
+  - customers_masked.csv [OK]
+  - pipeline_execution_report.txt [OK]
+
+SUMMARY:
+  - Input : 15 rows (raw / messy)
+  - Output: 14 rows (cleaned, validated, masked)
+  - Quality: 14 failures in 10 rows
+  - PII Risk: MITIGATED (all PII columns masked)
+Status: SUCCESS [PASS]

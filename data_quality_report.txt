@@ -1,0 +1,97 @@
+DATA QUALITY PROFILE REPORT
+============================
+
+COMPLETENESS:
+  - customer_id: 100.0% (no missing values) [OK]
+  - first_name: 93.3% (1 missing) [FAIL]
+  - last_name: 93.3% (1 missing) [FAIL]
+  - email: 100.0% (no missing values) [OK]
+  - phone: 100.0% (no missing values) [OK]
+  - date_of_birth: 93.3% (1 missing) [FAIL]
+  - address: 86.7% (2 missing) [FAIL]
+  - income: 93.3% (1 missing) [FAIL]
+  - account_status: 93.3% (1 missing) [FAIL]
+  - created_date: 100.0% (no missing values) [OK]
+
+DATA TYPES:
+  - customer_id: OBJECT [FAIL]  [should be INT]
+  - first_name: OBJECT [OK]
+  - last_name: OBJECT [OK]
+  - email: OBJECT [OK]
+  - phone: OBJECT [OK]
+  - date_of_birth: OBJECT [FAIL]  [should be DATE]
+  - address: OBJECT [OK]
+  - income: OBJECT [FAIL]  [should be NUMERIC]
+  - account_status: OBJECT [OK]
+  - created_date: OBJECT [FAIL]  [should be DATE]
+
+FORMAT ISSUES:
+  Phone formats detected:
+    - XXX-XXX-XXXX: 9 row(s) — e.g. ['555-123-4567', '555-345-6789']
+    - (XXX) XXX-XXXX: 3 row(s) — e.g. ['(555) 987-6543', '(555) 234-5678']
+    - XXX.XXX.XXXX: 1 row(s) — e.g. ['555.678.9012']
+    - XXXXXXXXXX: 1 row(s) — e.g. ['5557890123']
+    - +1-XXX-XXX-XXXX: 1 row(s) — e.g. ['+1-555-789-0123']
+
+  Date formats in 'date_of_birth':
+    - YYYY-MM-DD: 11 row(s) — e.g. ['1985-03-15', '1990-07-22']
+    - MM/DD/YYYY: 1 row(s) — e.g. ['01/15/1975']
+    - invalid_date (literal): 2 row(s) — e.g. ['invalid_date', 'invalid_date']
+  Date formats in 'created_date':
+    - YYYY-MM-DD: 15 row(s) — e.g. ['2024-01-10', '2024-01-11']
+
+UNIQUENESS:
+  - customer_id: NOT UNIQUE [FAIL] (2 duplicate row(s) found)
+    Duplicated IDs: ['1']
+    Affected rows: [{'customer_id': '1'}, {'customer_id': '1'}]
+
+QUALITY ISSUES:
+  1. [Critical] Invalid Date String in 'date_of_birth', Row 7: 'invalid_date'
+  2. [Critical] Invalid Date String in 'date_of_birth', Row 12: 'invalid_date'
+  3. [Critical] Non Numeric Income in 'income', Row 4: '<NA>'
+  4. [High] Negative Income in 'income', Row 12: '-5000'
+  5. [Medium] Income Exceeds 10M in 'income', Row 14: '15000000'
+  6. [High] Extreme Age in 'date_of_birth', Row 13: '1850-01-01' (age ~176.1 years)
+  7. [Medium] Future Created Date in 'created_date', Row 6: '2027-06-01'
+  8. [High] Invalid Account Status in 'account_status', Row 11: 'unknown'
+  9. [Medium] Name All Caps in 'first_name', Row 4: '<NA>'
+  10. [Medium] Name All Caps in 'first_name', Row 7: 'PATRICIA'
+  11. [Medium] Name All Lower in 'first_name', Row 11: 'jennifer'
+  12. [Medium] Name All Caps in 'last_name', Row 6: '<NA>'
+  13. [Medium] Name All Lower in 'last_name', Row 9: 'wilson'
+  14. [Medium] Non Standard Phone Format in 'phone', Row 3: '(555) 987-6543'
+  15. [Medium] Non Standard Phone Format in 'phone', Row 4: '(555) 234-5678'
+  16. [Medium] Non Standard Phone Format in 'phone', Row 13: '(555) 012-3456'
+  17. [Medium] Non Standard Phone Format in 'phone', Row 8: '555.678.9012'
+  18. [Medium] Non Standard Phone Format in 'phone', Row 9: '5557890123'
+  19. [Medium] Non Standard Phone Format in 'phone', Row 10: '+1-555-789-0123'
+
+SEVERITY:
+  - Critical (blocks processing): 3 issue(s)
+      * Invalid Date String in 'date_of_birth' Row 7
+      * Invalid Date String in 'date_of_birth' Row 12
+      * Non Numeric Income in 'income' Row 4
+  - High (data incorrect): 3 issue(s)
+      * Negative Income in 'income' Row 12
+      * Extreme Age in 'date_of_birth' Row 13
+      * Invalid Account Status in 'account_status' Row 11
+  - Medium (needs cleaning): 13 issue(s)
+      * Income Exceeds 10M in 'income' Row 14
+      * Future Created Date in 'created_date' Row 6
+      * Name All Caps in 'first_name' Row 4
+      * Name All Caps in 'first_name' Row 7
+      * Name All Lower in 'first_name' Row 11
+      * Name All Caps in 'last_name' Row 6
+      * Name All Lower in 'last_name' Row 9
+      * Non Standard Phone Format in 'phone' Row 3
+      * Non Standard Phone Format in 'phone' Row 4
+      * Non Standard Phone Format in 'phone' Row 13
+      * Non Standard Phone Format in 'phone' Row 8
+      * Non Standard Phone Format in 'phone' Row 9
+      * Non Standard Phone Format in 'phone' Row 10
+
+SUMMARY:
+  - Total rows: 15
+  - Total columns: 10
+  - Rows with at least one issue: 13 (86.7%)
+  - Clean rows: 2 (13.3%)
