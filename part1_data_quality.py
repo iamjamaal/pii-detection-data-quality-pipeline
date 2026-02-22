@@ -640,5 +640,5 @@ if __name__ == "__main__":
     print(f"[Part 1] Loaded {len(raw_df)} rows × {len(raw_df.columns)} columns.")
 
     report_text, _ = run_quality_analysis(raw_df, output_dir=".")
-    print(report_text)
+    sys.stdout.buffer.write((report_text + "\n").encode("utf-8"))
     print("\n[Part 1] data_quality_report.txt written.")

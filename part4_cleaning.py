@@ -498,6 +498,6 @@ if __name__ == "__main__":
     print(f"[Part 4] Loaded {len(raw_df)} rows × {len(raw_df.columns)} columns.")
 
     cleaned_df, log = run_cleaning(raw_df, output_dir=".")
-    print(log)
+    sys.stdout.buffer.write((log + "\n").encode("utf-8"))
     print(f"\n[Part 4] cleaning_log.txt and customers_cleaned.csv written.")
-    print(f"[Part 4] Cleaned dataset: {len(cleaned_df)} rows × {len(cleaned_df.columns)} columns.")
+    print(f"[Part 4] Cleaned dataset: {len(cleaned_df)} rows x {len(cleaned_df.columns)} columns.")

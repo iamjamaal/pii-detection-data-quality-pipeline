@@ -488,7 +488,7 @@ def build_report(
         "date_of_birth":  "Valid date, age 0-150 years",
         "created_date":   "Valid date, not in future",
         "address":        "Non-empty string",
-        "income":         "Non-negative, ≤ $10M",
+        "income":         "Non-negative, <= $10M",
         "account_status": "active|inactive|suspended",
     }
 
@@ -550,7 +550,6 @@ if __name__ == "__main__":
     print(f"[Part 3] Loaded {len(raw_df)} rows × {len(raw_df.columns)} columns.")
 
     report_text, failures = run_validation(raw_df, output_dir=".")
-    print(report_text)
-    print(f"\n[Part 3] validation_results.txt written.")
+    sys.stdout.buffer.write((report_text + "\n").encode("utf-8"))
     total = sum(len(v) for v in failures.values())
-    print(f"[Part 3] Total validation failures: {total}")
+    print(f"\n[Part 3] validation_results.txt written. Total failures: {total}")

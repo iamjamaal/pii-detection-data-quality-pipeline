@@ -384,5 +384,5 @@ if __name__ == "__main__":
     print(f"[Part 2] Loaded {len(raw_df)} rows × {len(raw_df.columns)} columns.")
 
     report_text, _ = run_pii_detection(raw_df, output_dir=".")
-    print(report_text)
+    sys.stdout.buffer.write((report_text + "\n").encode("utf-8"))
     print("\n[Part 2] pii_detection_report.txt written.")

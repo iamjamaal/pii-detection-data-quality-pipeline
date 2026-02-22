@@ -324,5 +324,5 @@ if __name__ == "__main__":
     print(f"[Part 5] Loaded {len(cleaned)} rows × {len(cleaned.columns)} columns.")
 
     masked_df, report = run_masking(cleaned, output_dir=".")
-    print(report)
+    sys.stdout.buffer.write((report + "\n").encode("utf-8"))
     print("\n[Part 5] masked_sample.txt and customers_masked.csv written.")
