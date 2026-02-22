@@ -48,7 +48,7 @@ SUMMARY TABLE:
   date_of_birth        Valid date, age 0-150 years    12     3
   created_date         Valid date, not in future    14     1
   address              Non-empty string        13     2
-  income               Non-negative, ≤ $10M    12     3
+  income               Non-negative, <= $10M    12     3
   account_status       active|inactive|suspended    13     2
 
 OVERALL: 14 total validation failure(s) across 10 row(s)
