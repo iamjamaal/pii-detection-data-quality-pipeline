@@ -24,7 +24,7 @@
 ---
 
 ### Issue 3  Missing Critical Fields (High)
-**What it was:** Six columns had at least one null or empty value: `first_name`, `last_name`, `address`, `income`, `account_status`, and `date_of_birth`. Some of these are operationally critical — you cannot send a letter without an address, and you cannot apply risk-based pricing without income.
+**What it was:** Six columns had at least one null or empty value: `first_name`, `last_name`, `address`, `income`, `account_status`, and `date_of_birth`. Some of these are operationally critical, you cannot send a letter without an address, and you cannot apply risk-based pricing without income.
 
 **How it was fixed:** A deliberate per-column strategy was applied: string fields (`first_name`, `last_name`, `address`) were filled with the placeholder `[UNKNOWN]` to preserve row count and flag records needing manual review. `income` was set to `0` (conservative, flagged for review). `account_status` was filled with `unknown` (a sentinel value outside valid states, easily filterable). `date_of_birth` was left as `NaN` because inferring a birth date is not feasible.
 
