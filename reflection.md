@@ -5,7 +5,7 @@
 
 ## 1. Top 5 Data Quality Issues Found
 
-### Issue 1 — Multiple Date Formats (Critical)
+### Issue 1 Multiple Date Formats (Critical)
 **What it was:** The `date_of_birth` and `created_date` columns contained at least three different formats: `YYYY-MM-DD` (standard), `MM/DD/YYYY` (US locale), and the literal string `"invalid_date"`. Pandas could not parse these columns as datetime automatically, leaving them as `object` (string) dtype.
 
 **How it was fixed:** A multi-format parser (`_parse_date`) attempted each known format in sequence. Successfully parsed values were re-serialised as `YYYY-MM-DD`. Values matching `"invalid_date"` or otherwise unparseable were set to `NaN` and logged.
@@ -14,7 +14,7 @@
 
 ---
 
-### Issue 2 — Inconsistent Phone Formats (High)
+### Issue 2  Inconsistent Phone Formats (High)
 **What it was:** Five distinct phone formats were present in one column: `XXX-XXX-XXXX`, `(XXX) XXX-XXXX`, `XXX.XXX.XXXX`, `XXXXXXXXXX` (no separators), and `+1-XXX-XXX-XXXX` (E.164-style with country code). Any regex-based lookup or JOIN on phone numbers would silently fail to match equivalent numbers stored in different formats.
 
 **How it was fixed:** All non-digit characters were stripped; a leading `1` was removed for 11-digit US numbers; the remaining 10 digits were reformatted as `XXX-XXX-XXXX`. Numbers that could not be normalised to exactly 10 digits were flagged and left unchanged.
@@ -23,7 +23,7 @@
 
 ---
 
-### Issue 3 — Missing Critical Fields (High)
+### Issue 3  Missing Critical Fields (High)
 **What it was:** Six columns had at least one null or empty value: `first_name`, `last_name`, `address`, `income`, `account_status`, and `date_of_birth`. Some of these are operationally critical — you cannot send a letter without an address, and you cannot apply risk-based pricing without income.
 
 **How it was fixed:** A deliberate per-column strategy was applied: string fields (`first_name`, `last_name`, `address`) were filled with the placeholder `[UNKNOWN]` to preserve row count and flag records needing manual review. `income` was set to `0` (conservative, flagged for review). `account_status` was filled with `unknown` (a sentinel value outside valid states, easily filterable). `date_of_birth` was left as `NaN` because inferring a birth date is not feasible.
@@ -41,7 +41,7 @@
 
 ---
 
-### Issue 5 — Out-of-Range Values: Negative Income and Age > 150 (High)
+### Issue 5  Out-of-Range Values: Negative Income and Age > 150 (High)
 **What it was:** One row had `income = -5000` and one row had `date_of_birth = 1850-01-01` (implying an age of ~175 years). Both represent data-entry errors or ETL bugs that produce logically impossible values.
 
 **How it was fixed:** Negative income was corrected to `0` and flagged for review. The implausible birth date was set to `NaN` (the actual date cannot be inferred). A separate flag was raised for the record with `income = 15,000,000`, which is technically possible but worth human review before analysis.
