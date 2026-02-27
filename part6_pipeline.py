@@ -5,13 +5,13 @@ End-to-end orchestration pipeline for the PII Detection & Data Quality
 Validation project.
 
 Loads raw customer data, then executes all five processing stages in sequence:
-  Stage 1  – Load
-  Stage 2  – Data Quality Profiling  (Part 1)
-  Stage 3  – PII Detection           (Part 2)
-  Stage 4  – Validation              (Part 3)
-  Stage 5  – Cleaning                (Part 4)
-  Stage 6  – PII Masking             (Part 5)
-  Stage 7  – Save pipeline report
+  Stage 1  Load
+  Stage 2  Data Quality Profiling  
+  Stage 3  PII Detection           
+  Stage 4  Validation              
+  Stage 5  Cleaning                
+  Stage 6  PII Masking             
+  Stage 7  Save pipeline report
 
 Each stage is wrapped in its own try/except block.  A stage failure is logged
 and execution continues where possible; a CSV load failure terminates the run.
@@ -36,9 +36,9 @@ from typing import Optional
 
 import pandas as pd
 
-# ---------------------------------------------------------------------------
+
+
 # Logging setup
-# ---------------------------------------------------------------------------
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s  [%(levelname)s]  %(message)s",
@@ -47,9 +47,9 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-# ---------------------------------------------------------------------------
+
+
 # Pipeline orchestrator
-# ---------------------------------------------------------------------------
 
 def run_pipeline(
     input_csv_path: str = "customers_raw.csv",
@@ -82,9 +82,10 @@ def run_pipeline(
     # Track stage outcomes for the final report
     stage_results = {}
 
-    # -----------------------------------------------------------------------
+
+
+    
     # Stage 1: Load
-    # -----------------------------------------------------------------------
     logger.info("[Stage 1] Loading raw data ...")
     try:
         raw_df = pd.read_csv(input_csv_path, dtype=str, keep_default_na=False)
@@ -103,9 +104,9 @@ def run_pipeline(
         logger.error(f"[Stage 1] Unexpected error loading CSV: {exc}")
         raise SystemExit(1)
 
-    # -----------------------------------------------------------------------
+
+    
     # Stage 2: Data Quality Profiling
-    # -----------------------------------------------------------------------
     logger.info("[Stage 2] Running data quality profiling ...")
     try:
         from part1_data_quality import run_quality_analysis
@@ -129,9 +130,10 @@ def run_pipeline(
         logger.warning(f"[Stage 2] Profiling failed: {exc}\n{traceback.format_exc()}")
         stage_results["quality"] = {"status": "FAILED", "detail": str(exc)}
 
-    # -----------------------------------------------------------------------
+
+
+    
     # Stage 3: PII Detection
-    # -----------------------------------------------------------------------
     logger.info("[Stage 3] Running PII detection ...")
     try:
         from part2_pii_detection import run_pii_detection
@@ -158,9 +160,10 @@ def run_pipeline(
         logger.warning(f"[Stage 3] PII detection failed: {exc}\n{traceback.format_exc()}")
         stage_results["pii"] = {"status": "FAILED", "detail": str(exc)}
 
-    # -----------------------------------------------------------------------
+
+
+    
     # Stage 4: Validation
-    # -----------------------------------------------------------------------
     logger.info("[Stage 4] Running validation ...")
     try:
         from part3_validator import run_validation
@@ -185,9 +188,9 @@ def run_pipeline(
         stage_results["validation"] = {"status": "FAILED", "detail": str(exc)}
         failures_by_col = {}
 
-    # -----------------------------------------------------------------------
+
+    
     # Stage 5: Cleaning
-    # -----------------------------------------------------------------------
     logger.info("[Stage 5] Running data cleaning ...")
     cleaned_df: Optional[pd.DataFrame] = None
     try:
@@ -207,10 +210,11 @@ def run_pipeline(
         logger.warning(f"[Stage 5] Cleaning failed: {exc}\n{traceback.format_exc()}")
         stage_results["cleaning"] = {"status": "FAILED", "detail": str(exc)}
         cleaned_df = raw_df  # fall back to raw if cleaning failed
+        
+        
 
-    # -----------------------------------------------------------------------
+    
     # Stage 6: PII Masking
-    # -----------------------------------------------------------------------
     logger.info("[Stage 6] Running PII masking ...")
     try:
         from part5_masking import run_masking
@@ -227,10 +231,10 @@ def run_pipeline(
     except Exception as exc:
         logger.warning(f"[Stage 6] Masking failed: {exc}\n{traceback.format_exc()}")
         stage_results["masking"] = {"status": "FAILED", "detail": str(exc)}
-
-    # -----------------------------------------------------------------------
+        
+        
+        
     # Stage 7: Generate pipeline execution report
-    # -----------------------------------------------------------------------
     end_time = datetime.now()
     elapsed = (end_time - start_time).total_seconds()
 
@@ -329,9 +333,8 @@ def run_pipeline(
     sys.stdout.buffer.write(("\n" + report_text + "\n").encode("utf-8"))
 
 
-# ---------------------------------------------------------------------------
+
 # Standalone entry point
-# ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
     csv_path   = sys.argv[1] if len(sys.argv) > 1 else "customers_raw.csv"
