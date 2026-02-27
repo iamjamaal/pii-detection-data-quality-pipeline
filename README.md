@@ -18,7 +18,7 @@ Each stage is a standalone Python module that can run independently or be orches
 
 ## Dataset
 
-`customers_raw.csv` — 15 rows of intentionally messy customer data with:
+`customers_raw.csv`  15 rows of intentionally messy customer data with:
 
 | Issue | Example |
 |---|---|
@@ -55,7 +55,7 @@ Follow these steps in order. Each step generates the output files needed by the 
 
 ---
 
-### Step 0 — Install dependencies
+### Step 0  Install dependencies
 
 ```bash
 pip install -r requirements.txt
@@ -63,7 +63,7 @@ pip install -r requirements.txt
 
 ---
 
-### Step 1 — Profile the raw data
+### Step 1  Profile the raw data
 
 ```bash
 python part1_data_quality.py customers_raw.csv
@@ -73,7 +73,7 @@ python part1_data_quality.py customers_raw.csv
 
 ---
 
-### Step 2 — Detect PII
+### Step 2  Detect PII
 
 ```bash
 python part2_pii_detection.py customers_raw.csv
@@ -83,7 +83,7 @@ python part2_pii_detection.py customers_raw.csv
 
 ---
 
-### Step 3 — Validate the raw data
+### Step 3  Validate the raw data
 
 ```bash
 python part3_validator.py customers_raw.csv
@@ -93,7 +93,7 @@ python part3_validator.py customers_raw.csv
 
 ---
 
-### Step 4 — Clean the data
+### Step 4  Clean the data
 
 ```bash
 python part4_cleaning.py customers_raw.csv
@@ -103,7 +103,7 @@ python part4_cleaning.py customers_raw.csv
 
 ---
 
-### Step 5 — Mask PII
+### Step 5  Mask PII
 
 ```bash
 python part5_masking.py customers_cleaned.csv
@@ -114,7 +114,7 @@ python part5_masking.py customers_cleaned.csv
 
 ---
 
-### Step 6 — Run the full pipeline (all steps at once)
+### Step 6  Run the full pipeline (all steps at once)
 
 ```bash
 python part6_pipeline.py customers_raw.csv .
@@ -149,7 +149,7 @@ pii-detection-data-quality-pipeline/
 
 ## Pipeline Stages
 
-### Stage 1 — Data Quality Profiling (`part1_data_quality.py`)
+### Stage 1  Data Quality Profiling (`part1_data_quality.py`)
 - Completeness % per column
 - Detected vs expected data types
 - Phone and date format diversity
@@ -157,18 +157,18 @@ pii-detection-data-quality-pipeline/
 - Invalid value detection (literal strings, out-of-range, future dates)
 - Severity classification: Critical / High / Medium
 
-### Stage 2 — PII Detection (`part2_pii_detection.py`)
+### Stage 2  PII Detection (`part2_pii_detection.py`)
 - Column-level PII classification (HIGH / MEDIUM risk)
 - Regex scanning for email and phone patterns
 - Per-row PII inventory
 - Breach exposure risk narrative
 
-### Stage 3 — Validation (`part3_validator.py`)
+### Stage 3  Validation (`part3_validator.py`)
 - Custom rule engine — no external validation libraries required
 - Rules per column: uniqueness, regex, date parsing, range checks, enum membership
 - Outputs every failure with row number, value, and violated rule
 
-### Stage 4 — Cleaning (`part4_cleaning.py`)
+### Stage 4  Cleaning (`part4_cleaning.py`)
 - Phone normalisation → `XXX-XXX-XXXX`
 - Date normalisation → `YYYY-MM-DD`
 - Name title-casing
@@ -176,7 +176,7 @@ pii-detection-data-quality-pipeline/
 - Duplicate removal, negative income correction, extreme-age nulling
 - Re-validation before/after comparison
 
-### Stage 5 — PII Masking (`part5_masking.py`)
+### Stage 5  PII Masking (`part5_masking.py`)
 
 | Column | Before | After |
 |---|---|---|
@@ -189,7 +189,7 @@ pii-detection-data-quality-pipeline/
 
 Columns **not** masked: `customer_id`, `income`, `account_status`, `created_date`
 
-### Stage 6 — Pipeline Orchestration (`part6_pipeline.py`)
+### Stage 6  Pipeline Orchestration (`part6_pipeline.py`)
 - Imports and calls all five modules in sequence
 - Per-stage try/except with structured logging
 - Generates `pipeline_execution_report.txt`
@@ -219,7 +219,7 @@ See **[reflection.md](reflection.md)** for a full written analysis covering:
 
 - Top 5 data quality issues found and how each was fixed
 - PII risk assessment and breach impact analysis
-- Masking trade-offs — when to mask vs. when not to
+- Masking trade-offs,  when to mask vs. when not to
 - Validation strategy evaluation and identified gaps
 - Production operations: scheduling, failure handling, monitoring, and rollback
 
@@ -227,10 +227,10 @@ See **[reflection.md](reflection.md)** for a full written analysis covering:
 
 ## Key Concepts
 
-- **Data profiling** — understanding what's broken before touching it
-- **PII detection** — regex-based scanning + column classification
-- **Validation** — rule-based quality gates with full failure context
-- **ETL cleaning** — documented, auditable transformations
-- **PII masking** — structure-preserving anonymisation for safe sharing
-- **Pipeline design** — modular, importable, error-tolerant orchestration
-- **Governance** — severity tiers, missing-value strategies, review flags
+- **Data profiling**  understanding what's broken before touching it
+- **PII detection**  regex-based scanning + column classification
+- **Validation**  rule-based quality gates with full failure context
+- **ETL cleaning**  documented, auditable transformations
+- **PII masking**  structure-preserving anonymisation for safe sharing
+- **Pipeline design**  modular, importable, error-tolerant orchestration
+- **Governance**  severity tiers, missing-value strategies, review flags
