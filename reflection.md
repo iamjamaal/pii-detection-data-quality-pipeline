@@ -46,7 +46,7 @@
 
 **How it was fixed:** Negative income was corrected to `0` and flagged for review. The implausible birth date was set to `NaN` (the actual date cannot be inferred). A separate flag was raised for the record with `income = 15,000,000`, which is technically possible but worth human review before analysis.
 
-**Impact:** Negative income would corrupt income-based statistics (averages, percentiles). An extreme birth date would skew any age-demographic analysis and could cause integer overflows in age-calculation queries.
+**Impact:** Negative income would corrupt income-based statistics (averages, percentiles). An extreme birth date would skew any age-demographic analysis and could cause integer overflows in age calculation queries.
 
 ---
 
@@ -58,13 +58,13 @@
 | `first_name` + `last_name` | Direct identifier | Identifies the individual by name |
 | `email` | Direct identifier | Enables contact, login credential, phishing vector |
 | `phone` | Direct identifier | Enables contact, SIM-swap attacks, social engineering |
-| `address` | Direct identifier | Physical location — enables stalking, mail fraud |
+| `address` | Direct identifier | Physical location enables stalking, mail fraud |
 | `date_of_birth` | Quasi-identifier | Combined with name and address, sufficient for identity theft |
 | `income` | Sensitive attribute | Reveals economic status; protected under many privacy laws |
 
 ### Damage from a Breach
 A breach of this unmasked dataset would give attackers:
-- **Phishing campaigns** full email list with names for targeted spear-phishing.
+- **Phishing campaigns** full email list with names for targeted spear phishing.
 - **Identity theft**  name + DOB + address satisfies most "knowledge-based authentication" questions used by banks and utilities.
 - **SIM-swap fraud** phone number combined with personal details is sufficient to fool many carriers into transferring a phone number, enabling MFA bypass.
 - **Financial fraud**  income data enables targeted credit-card or loan fraud and reveals which customers are high-value targets.
@@ -164,12 +164,12 @@ For a fintech ingestion pipeline processing customer sign-ups, a reasonable cade
 ## 6. Lessons Learned
 
 ### What Was Surprising
-The sheer variety of phone formats in a single small dataset was striking. In production, even more exotic formats appear (extensions, international numbers with varying prefix conventions, toll-free numbers). A naive regex cannot cover all cases; a dedicated phone-number library (e.g., `libphonenumber`) is worth the dependency in any real system.
+The sheer variety of phone formats in a single small dataset was striking. In production, even more exotic formats appear (extensions, international numbers with varying prefix conventions, toll free numbers). A naive regex cannot cover all cases; a dedicated phone number library (e.g., `libphonenumber`) is worth the dependency in any real system.
 
 The "age > 150" check also highlighted how easy it is for a database timestamp mismatch or a two-digit year ambiguity to produce obviously impossible values that still pass type checks.
 
 ### What Was Harder Than Expected
-Designing a per-column missing-value strategy that is both defensible and clearly documented proved more nuanced than simply calling `fillna()`. Each decision has a downstream impact: filling `account_status` with `"unknown"` means downstream queries must exclude that value from active-customer counts, or they will overcount.
+Designing a per-column missing-value strategy that is both defensible and clearly documented proved more nuanced than simply calling `fillna()`. Each decision has a downstream impact: filling `account_status` with `"unknown"` means downstream queries must exclude that value from active customer counts, or they will overcount.
 
 ### What Would Be Different Next Time
 1. **Agree on a data contract with the upstream source system before ingestion** define expected formats, valid values, and null policies in a shared schema document. This eliminates many surprises at ingestion time.
