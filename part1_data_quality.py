@@ -1,6 +1,6 @@
 """
 part1_data_quality.py
----------------------
+
 Exploratory Data Quality Analysis for the PII Detection & Data Quality
 Validation Pipeline project.
 
@@ -24,9 +24,10 @@ from datetime import datetime, date
 from typing import Dict, List, Tuple, Any
 
 
-# ---------------------------------------------------------------------------
+
+
+
 # Expected schema metadata
-# ---------------------------------------------------------------------------
 EXPECTED_TYPES: Dict[str, Tuple[str, str]] = {
     "customer_id":    ("int64",       "INT"),
     "first_name":     ("object",      "STRING"),
@@ -57,10 +58,9 @@ DATE_PATTERNS: Dict[str, str] = {
 }
 
 
-# ---------------------------------------------------------------------------
-# Helper functions
-# ---------------------------------------------------------------------------
 
+
+# Helper functions
 def _is_blank(val: Any) -> bool:
     """Return True if val is NaN or an empty/whitespace-only string."""
     if pd.isna(val):
@@ -427,7 +427,6 @@ def build_report(
     """
     lines: List[str] = []
     lines.append("DATA QUALITY PROFILE REPORT")
-    lines.append("============================")
     lines.append("")
 
     # --- COMPLETENESS ---
@@ -476,8 +475,10 @@ def build_report(
         lines.append(f"    Duplicated IDs: {uniqueness['duplicated_ids']}")
         lines.append(f"    Affected rows: {uniqueness['duplicated_rows']}")
     lines.append("")
+    
+    
 
-    # --- QUALITY ISSUES ---
+    # QUALITY ISSUES 
     all_issues = invalid_vals + status_issues + name_issues
     # Phone format issues (non-standard)
     for fmt, examples in phone_formats.items():
@@ -511,8 +512,9 @@ def build_report(
                 f"Row {row}: '{val}'{extra}"
             )
     lines.append("")
+    
 
-    # --- SEVERITY SUMMARY ---
+    # SEVERITY SUMMARY 
     severity_buckets: Dict[str, List[str]] = {
         "Critical": [], "High": [], "Medium": []
     }
@@ -539,7 +541,9 @@ def build_report(
             lines.append(f"      * {item}")
     lines.append("")
 
-    # --- SUMMARY ---
+
+
+    # SUMMARY 
     total_rows = len(df)
     rows_with_issues: set = set()
     for issue in all_issues:
@@ -625,10 +629,11 @@ def run_quality_analysis(
     return report, findings
 
 
-# ---------------------------------------------------------------------------
-# Standalone entry point
-# ---------------------------------------------------------------------------
 
+
+
+
+# Standalone entry point
 if __name__ == "__main__":
     import sys
 

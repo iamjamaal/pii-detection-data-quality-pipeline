@@ -107,7 +107,7 @@ pii-detection-data-quality-pipeline/
 ├── customers_masked.csv            # Part 5 output — PII-masked dataset
 ├── pipeline_execution_report.txt   # Part 6 output — full run summary
 │
-├── reflection.md                   # Governance, trade-offs, and lessons learned
+├── reflection.md                   # Governance, trade-offs, and lessons learned  → [read reflection](reflection.md)
 ├── requirements.txt
 └── README.md
 ```
@@ -177,6 +177,18 @@ Validation failures after cleaning:   6 (intentional flags — not errors)
 PII coverage:  100% of rows contain at least one PII field
 After masking: 0 PII fields exposed in customers_masked.csv
 ```
+
+---
+
+## Reflection & Governance
+
+See **[reflection.md](reflection.md)** for a full written analysis covering:
+
+- Top 5 data quality issues found and how each was fixed
+- PII risk assessment and breach impact analysis
+- Masking trade-offs — when to mask vs. when not to
+- Validation strategy evaluation and identified gaps
+- Production operations: scheduling, failure handling, monitoring, and rollback
 
 ---
 

@@ -1,6 +1,6 @@
 """
 part3_validator.py
-------------------
+
 Custom data validation framework for the customer dataset.
 
 Defines and applies validation rules for all 10 columns using only
@@ -19,9 +19,8 @@ from datetime import datetime, date
 from typing import Dict, List, Tuple, Any
 
 
-# ---------------------------------------------------------------------------
+
 # Validation rules registry
-# ---------------------------------------------------------------------------
 # Each entry: (rule_name, checker_function_name)
 # The checker receives (value, df, row_idx) and returns (passed: bool, msg: str)
 
@@ -56,9 +55,8 @@ def _parse_date(val: Any) -> Tuple[bool, Any]:
     return False, None
 
 
-# ---------------------------------------------------------------------------
+
 # Per-column validators
-# ---------------------------------------------------------------------------
 
 def validate_customer_id(
     series: pd.Series, df: pd.DataFrame
@@ -379,9 +377,8 @@ def validate_account_status(series: pd.Series) -> List[Dict]:
     return failures
 
 
-# ---------------------------------------------------------------------------
+
 # Main validation runner
-# ---------------------------------------------------------------------------
 
 def run_all_validators(df: pd.DataFrame) -> Dict[str, List[Dict]]:
     """
@@ -445,7 +442,6 @@ def build_report(
 
     lines: List[str] = []
     lines.append("VALIDATION RESULTS")
-    lines.append("===================")
     lines.append("")
     lines.append(f"PASS: {passed_rows} rows passed all checks")
     lines.append(f"FAIL: {len(failed_rows)} rows failed at least one check")
@@ -468,8 +464,10 @@ def build_report(
         lines.append("No failures found across all columns.")
 
     lines.append("")
+    
+    
 
-    # --- SUMMARY TABLE ---
+    # SUMMARY TABLE 
     col_order = [
         "customer_id", "first_name", "last_name", "email", "phone",
         "date_of_birth", "created_date", "address", "income", "account_status"
@@ -536,9 +534,9 @@ def run_validation(
     return report, failures_by_col
 
 
-# ---------------------------------------------------------------------------
+
+
 # Standalone entry point
-# ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
     import sys

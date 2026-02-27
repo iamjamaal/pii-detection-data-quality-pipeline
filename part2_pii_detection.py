@@ -1,6 +1,5 @@
 """
 part2_pii_detection.py
------------------------
 PII (Personally Identifiable Information) detection for the customer dataset.
 
 Classifies columns by PII risk level, uses regex to find email and phone
@@ -17,9 +16,8 @@ import pandas as pd
 from typing import Dict, List, Tuple, Set
 
 
-# ---------------------------------------------------------------------------
+
 # PII column classification
-# ---------------------------------------------------------------------------
 
 PII_COLUMNS: Dict[str, Dict] = {
     "first_name":    {"category": "Names",               "risk": "HIGH"},
@@ -54,9 +52,10 @@ DATE_PATTERN = re.compile(
 )
 
 
-# ---------------------------------------------------------------------------
+
+
+
 # Detection functions
-# ---------------------------------------------------------------------------
 
 def detect_email_pii(df: pd.DataFrame) -> List[int]:
     """
@@ -242,10 +241,9 @@ def build_report(
     total = len(df)
     lines: List[str] = []
     lines.append("PII DETECTION REPORT")
-    lines.append("======================")
     lines.append("")
 
-    # --- RISK ASSESSMENT ---
+    # RISK ASSESSMENT 
     lines.append("RISK ASSESSMENT:")
     high_pii = [c for c, m in PII_COLUMNS.items() if m["risk"] == "HIGH"]
     med_pii  = [c for c, m in PII_COLUMNS.items() if m["risk"] == "MEDIUM"]
@@ -261,7 +259,7 @@ def build_report(
     )
     lines.append("")
 
-    # --- DETECTED PII ---
+    # DETECTED PII 
     def pct(n: int) -> str:
         return f"{round(n / total * 100, 1)}%"
 
@@ -274,7 +272,7 @@ def build_report(
     lines.append(f"  - Income data found:    {len(income_rows):>3} out of {total} rows ({pct(len(income_rows))})")
     lines.append("")
 
-    # --- PII BY ROW ---
+    # PII BY ROW 
     lines.append("PII BY ROW:")
     for i in range(total):
         row_num = i + 2   # human-readable: header is row 1
@@ -286,7 +284,8 @@ def build_report(
             lines.append(f"  - Row {row_num:>2} (ID={cust_id}): No PII detected")
     lines.append("")
 
-    # --- COLUMN PII CLASSIFICATION ---
+
+    # COLUMN PII CLASSIFICATION 
     lines.append("COLUMN PII CLASSIFICATION:")
     lines.append(f"  {'Column':<20} {'Category':<22} {'Risk'}")
     lines.append(f"  {'-'*20} {'-'*22} {'-'*6}")
@@ -296,7 +295,7 @@ def build_report(
         lines.append(f"  {col:<20} {'Non-PII':<22} {'NONE'}")
     lines.append("")
 
-    # --- EXPOSURE RISK ---
+    # EXPOSURE RISK 
     lines.append("EXPOSURE RISK:")
     lines.append("  If this dataset were breached, attackers could:")
     lines.append("  - Phish customers (have full email addresses)")
@@ -309,7 +308,7 @@ def build_report(
     )
     lines.append("")
 
-    # --- MITIGATION ---
+    # MITIGATION 
     lines.append(
         "MITIGATION: Mask all PII before sharing with analytics teams.\n"
         "  Apply column-level masking (names, emails, phones, addresses, DOBs).\n"
@@ -370,9 +369,9 @@ def run_pii_detection(
     return report, findings
 
 
-# ---------------------------------------------------------------------------
+
+
 # Standalone entry point
-# ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
     import sys

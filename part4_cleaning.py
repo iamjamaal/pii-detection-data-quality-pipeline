@@ -23,9 +23,10 @@ from datetime import datetime, date
 from typing import Dict, List, Tuple, Any, Optional
 
 
-# ---------------------------------------------------------------------------
+
+
+
 # Phone normalisation
-# ---------------------------------------------------------------------------
 
 def _strip_phone(val: Any) -> str:
     """Strip a phone value to digits only."""
@@ -68,9 +69,8 @@ def normalise_phone(val: Any) -> Tuple[str, Optional[str]]:
         return original, f"Could not normalise: {len(digits)} digits after stripping"
 
 
-# ---------------------------------------------------------------------------
+
 # Date normalisation
-# ---------------------------------------------------------------------------
 
 DATE_PARSE_FORMATS = ["%Y-%m-%d", "%m/%d/%Y", "%d/%m/%Y", "%Y/%m/%d"]
 
@@ -108,9 +108,9 @@ def normalise_date(val: Any) -> Tuple[Optional[str], Optional[str]]:
     return None, f"Unparseable date string '{v}' — set to NaN"
 
 
-# ---------------------------------------------------------------------------
+
+
 # Name title-casing
-# ---------------------------------------------------------------------------
 
 def normalise_name(val: Any) -> Tuple[str, Optional[str]]:
     """
@@ -133,9 +133,9 @@ def normalise_name(val: Any) -> Tuple[str, Optional[str]]:
     return v, None
 
 
-# ---------------------------------------------------------------------------
+
+
 # Main cleaning pipeline
-# ---------------------------------------------------------------------------
 
 def run_cleaning(
     df: pd.DataFrame, output_dir: str = "."
@@ -171,14 +171,13 @@ def run_cleaning(
 
     log_lines: List[str] = []
     log_lines.append("DATA CLEANING LOG")
-    log_lines.append("==================")
     log_lines.append("")
     log_lines.append("ACTIONS TAKEN:")
     log_lines.append("-" * 50)
 
-    # -----------------------------------------------------------------------
+
+
     # 1. Phone normalisation
-    # -----------------------------------------------------------------------
     phone_changes: List[str] = []
     phone_flags:   List[str] = []
     for idx, val in cleaned["phone"].items():
@@ -202,10 +201,10 @@ def run_cleaning(
         log_lines.append(f"  Phone flags ({len(phone_flags)} rows could not be normalised):")
         for f in phone_flags:
             log_lines.append(f)
+            
 
-    # -----------------------------------------------------------------------
+
     # 2. Date normalisation
-    # -----------------------------------------------------------------------
     date_changes: List[str] = []
     date_nulled:  List[str] = []
 
@@ -237,9 +236,9 @@ def run_cleaning(
         for n in date_nulled:
             log_lines.append(n)
 
-    # -----------------------------------------------------------------------
+
+
     # 3. Name title-casing
-    # -----------------------------------------------------------------------
     name_changes: List[str] = []
     for col in ["first_name", "last_name"]:
         for idx, val in cleaned[col].items():
@@ -255,9 +254,9 @@ def run_cleaning(
     for c in name_changes:
         log_lines.append(c)
 
-    # -----------------------------------------------------------------------
+
+    
     # 4. Missing value strategy
-    # -----------------------------------------------------------------------
     log_lines.append("\nMissing Values:")
 
     fill_strategy: Dict[str, Any] = {
@@ -291,9 +290,9 @@ def run_cleaning(
         f"(cannot be inferred)"
     )
 
-    # -----------------------------------------------------------------------
+
+
     # 5. Invalid value remediation
-    # -----------------------------------------------------------------------
     log_lines.append("\nInvalid Values:")
 
     # 5a. Duplicate customer_id — keep first, drop rest
@@ -413,10 +412,11 @@ def run_cleaning(
         )
     else:
         log_lines.append("  Age > 150: none found")
+        
+        
 
-    # -----------------------------------------------------------------------
+
     # 6. Re-validate
-    # -----------------------------------------------------------------------
     # Count failures on raw vs cleaned
     raw_failures_by_col = run_all_validators(df)
     raw_total = sum(len(v) for v in raw_failures_by_col.values())
@@ -438,9 +438,10 @@ def run_cleaning(
         )
     )
 
-    # -----------------------------------------------------------------------
+
+
+    
     # 7. Save cleaned CSV
-    # -----------------------------------------------------------------------
     out_csv = os.path.join(output_dir, "customers_cleaned.csv")
     cleaned.to_csv(out_csv, index=False)
     log_lines.append(
@@ -458,9 +459,8 @@ def run_cleaning(
     return cleaned, log_text
 
 
-# ---------------------------------------------------------------------------
+
 # Utility helpers
-# ---------------------------------------------------------------------------
 
 def _safe_float(val: str, default: float = 0.0) -> float:
     """Parse a string to float, returning default on failure."""
@@ -484,9 +484,9 @@ def _is_future_date(val: Any, today: date) -> bool:
     return False
 
 
-# ---------------------------------------------------------------------------
+
+
 # Standalone entry point
-# ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
     import sys

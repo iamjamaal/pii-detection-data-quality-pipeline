@@ -28,10 +28,8 @@ import pandas as pd
 from typing import Any, Tuple
 
 
-# ---------------------------------------------------------------------------
-# Masking functions
-# ---------------------------------------------------------------------------
 
+# Masking functions
 def mask_name(val: Any) -> str:
     """
     Mask a name value: keep first character, replace the rest with '***'.
@@ -166,9 +164,10 @@ def mask_dob(val: Any) -> str:
     return "****-**-**"
 
 
-# ---------------------------------------------------------------------------
+
+
+
 # Apply masking to DataFrame
-# ---------------------------------------------------------------------------
 
 def apply_masking(df: pd.DataFrame) -> pd.DataFrame:
     """
@@ -198,9 +197,9 @@ def apply_masking(df: pd.DataFrame) -> pd.DataFrame:
     return masked
 
 
-# ---------------------------------------------------------------------------
+
+
 # Report builder
-# ---------------------------------------------------------------------------
 
 def build_sample_report(
     cleaned_df: pd.DataFrame,
@@ -264,10 +263,9 @@ def build_sample_report(
     return "\n".join(lines)
 
 
-# ---------------------------------------------------------------------------
-# Main entry point for the module
-# ---------------------------------------------------------------------------
 
+
+# Main entry point for the module
 def run_masking(
     df: pd.DataFrame, output_dir: str = "."
 ) -> Tuple[pd.DataFrame, str]:
@@ -301,10 +299,9 @@ def run_masking(
     return masked_df, sample_report
 
 
-# ---------------------------------------------------------------------------
-# Standalone entry point
-# ---------------------------------------------------------------------------
 
+
+# Standalone entry point
 if __name__ == "__main__":
     import sys
 

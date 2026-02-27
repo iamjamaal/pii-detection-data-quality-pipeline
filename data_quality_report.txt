@@ -1,5 +1,5 @@
 DATA QUALITY PROFILE REPORT
-============================
+
 
 COMPLETENESS:
   - customer_id: 100.0% (no missing values) [OK]
@@ -13,6 +13,7 @@ COMPLETENESS:
   - account_status: 93.3% (1 missing) [FAIL]
   - created_date: 100.0% (no missing values) [OK]
 
+
 DATA TYPES:
   - customer_id: OBJECT [FAIL]  [should be INT]
   - first_name: OBJECT [OK]
@@ -25,6 +26,7 @@ DATA TYPES:
   - account_status: OBJECT [OK]
   - created_date: OBJECT [FAIL]  [should be DATE]
 
+
 FORMAT ISSUES:
   Phone formats detected:
     - XXX-XXX-XXXX: 9 row(s) — e.g. ['555-123-4567', '555-345-6789']
@@ -33,6 +35,7 @@ FORMAT ISSUES:
     - XXXXXXXXXX: 1 row(s) — e.g. ['5557890123']
     - +1-XXX-XXX-XXXX: 1 row(s) — e.g. ['+1-555-789-0123']
 
+
   Date formats in 'date_of_birth':
     - YYYY-MM-DD: 11 row(s) — e.g. ['1985-03-15', '1990-07-22']
     - MM/DD/YYYY: 1 row(s) — e.g. ['01/15/1975']
@@ -40,10 +43,12 @@ FORMAT ISSUES:
   Date formats in 'created_date':
     - YYYY-MM-DD: 15 row(s) — e.g. ['2024-01-10', '2024-01-11']
 
+
 UNIQUENESS:
   - customer_id: NOT UNIQUE [FAIL] (2 duplicate row(s) found)
     Duplicated IDs: ['1']
     Affected rows: [{'customer_id': '1'}, {'customer_id': '1'}]
+
 
 QUALITY ISSUES:
   1. [Critical] Invalid Date String in 'date_of_birth', Row 7: 'invalid_date'
@@ -65,6 +70,7 @@ QUALITY ISSUES:
   17. [Medium] Non Standard Phone Format in 'phone', Row 8: '555.678.9012'
   18. [Medium] Non Standard Phone Format in 'phone', Row 9: '5557890123'
   19. [Medium] Non Standard Phone Format in 'phone', Row 10: '+1-555-789-0123'
+
 
 SEVERITY:
   - Critical (blocks processing): 3 issue(s)
@@ -89,6 +95,7 @@ SEVERITY:
       * Non Standard Phone Format in 'phone' Row 8
       * Non Standard Phone Format in 'phone' Row 9
       * Non Standard Phone Format in 'phone' Row 10
+
 
 SUMMARY:
   - Total rows: 15
