@@ -1,7 +1,7 @@
 DATA CLEANING LOG
 
 ACTIONS TAKEN:
---------------------------------------------------
+
 
 Normalisation:
   Phone format: Converted to XXX-XXX-XXXX (6 row(s) affected)
