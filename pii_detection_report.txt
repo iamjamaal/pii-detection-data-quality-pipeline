@@ -1,0 +1,61 @@
+PII DETECTION REPORT
+
+RISK ASSESSMENT:
+  - HIGH: first_name, last_name, email, phone, date_of_birth, address
+    (Direct identifiers — names, contact details, DOB, address
+     combine to uniquely identify and locate any individual.)
+  - MEDIUM: income
+    (Financial sensitivity — income reveals economic status
+     and is protected under many privacy regulations.)
+
+DETECTED PII:
+  - Emails found:          15 out of 15 rows (100.0%)
+  - Phone numbers found:   15 out of 15 rows (100.0%)
+  - Addresses found:       13 out of 15 rows (86.7%)
+  - Dates of birth found:  14 out of 15 rows (93.3%)
+  - Names found:           15 out of 15 rows (100.0%)
+  - Income data found:     14 out of 15 rows (93.3%)
+
+PII BY ROW:
+  - Row  2 (ID=1): Name (first/last), Email, Phone, Address, Date of Birth, Income
+  - Row  3 (ID=2): Name (first/last), Email, Phone, Address, Date of Birth, Income
+  - Row  4 (ID=3): Name (first/last), Email, Phone, Address, Date of Birth
+  - Row  5 (ID=4): Name (first/last), Email, Phone, Address, Date of Birth, Income
+  - Row  6 (ID=5): Name (first/last), Email, Phone, Address, Date of Birth, Income
+  - Row  7 (ID=6): Name (first/last), Email, Phone, Address, Date of Birth, Income
+  - Row  8 (ID=7): Name (first/last), Email, Phone, Address, Date of Birth, Income
+  - Row  9 (ID=8): Name (first/last), Email, Phone, Address, Date of Birth, Income
+  - Row 10 (ID=9): Name (first/last), Email, Phone, Date of Birth, Income
+  - Row 11 (ID=10): Name (first/last), Email, Phone, Address, Date of Birth, Income
+  - Row 12 (ID=11): Name (first/last), Email, Phone, Address, Date of Birth, Income
+  - Row 13 (ID=12): Name (first/last), Email, Phone, Address, Date of Birth, Income
+  - Row 14 (ID=13): Name (first/last), Email, Phone, Date of Birth, Income
+  - Row 15 (ID=14): Name (first/last), Email, Phone, Address, Income
+  - Row 16 (ID=1): Name (first/last), Email, Phone, Address, Date of Birth, Income
+
+COLUMN PII CLASSIFICATION:
+  Column               Category               Risk
+  -------------------- ---------------------- ------
+  first_name           Names                  HIGH
+  last_name            Names                  HIGH
+  email                Contact Info           HIGH
+  phone                Contact Info           HIGH
+  date_of_birth        Sensitive Personal     HIGH
+  address              Sensitive Personal     HIGH
+  income               Financial              MEDIUM
+  customer_id          Non-PII                NONE
+  account_status       Non-PII                NONE
+  created_date         Non-PII                NONE
+
+EXPOSURE RISK:
+  If this dataset were breached, attackers could:
+  - Phish customers (have full email addresses)
+  - Spoof identities (have names + DOB + address)
+  - Social engineer targets (have phone numbers)
+  - Financial profiling (have income levels)
+  - At-risk individuals: ALL 15 customers (100.0% of dataset)
+
+MITIGATION: Mask all PII before sharing with analytics teams.
+  Apply column-level masking (names, emails, phones, addresses, DOBs).
+  Retain only customer_id, income, account_status, created_date for
+  analytics purposes — or tokenise income into brackets.

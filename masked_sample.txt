@@ -1,0 +1,24 @@
+BEFORE MASKING (first 3 rows):
+--------------------------------------------------
+customer_id,first_name,last_name,email,phone,date_of_birth,address,income,account_status,created_date
+1,John,Doe,john.doe@gmail.com,555-123-4567,1985-03-15,123 Main St New York NY 10001,75000,active,2024-01-10
+2,Jane,Smith,jane.smith@company.com,555-987-6543,1990-07-22,456 Oak Ave Los Angeles CA 90001,95000,active,2024-01-11
+3,[UNKNOWN],Johnson,bob.johnson@email.com,555-234-5678,1988-11-08,789 Cedar Blvd Brooklyn NY 11201,0,suspended,2024-01-12
+
+AFTER MASKING (first 3 rows):
+--------------------------------------------------
+customer_id,first_name,last_name,email,phone,date_of_birth,address,income,account_status,created_date
+1,J***,D***,j***@gmail.com,***-***-4567,1985-**-**,[MASKED ADDRESS],75000,active,2024-01-10
+2,J***,S***,j***@company.com,***-***-6543,1990-**-**,[MASKED ADDRESS],95000,active,2024-01-11
+3,[UNKNOWN],J***,b***@email.com,***-***-5678,1988-**-**,[MASKED ADDRESS],0,suspended,2024-01-12
+
+ANALYSIS:
+  - Data structure preserved (still 14 rows, 10 columns)
+  - PII masked: first_name, last_name, email, phone, address, date_of_birth
+  - Business data intact: customer_id, income, account_status, created_date
+  - Use case: Safe for analytics team (GDPR / CCPA compliant sharing)
+
+MASKING SUMMARY:
+  Masked columns  (6): first_name, last_name, email, phone, address, date_of_birth
+  Intact columns  (4): customer_id, income, account_status, created_date
+  Total rows processed: 14
