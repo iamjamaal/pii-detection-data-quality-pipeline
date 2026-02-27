@@ -49,38 +49,78 @@ pip install -r requirements.txt
 
 ---
 
-## Usage
+## How to Run
 
-### Run the full end-to-end pipeline
+Follow these steps in order. Each step generates the output files needed by the next.
+
+---
+
+### Step 0 — Install dependencies
 
 ```bash
-python part6_pipeline.py
+pip install -r requirements.txt
 ```
 
-Or with explicit paths:
+---
+
+### Step 1 — Profile the raw data
+
+```bash
+python part1_data_quality.py customers_raw.csv
+```
+
+**Generates:** `data_quality_report.txt`
+
+---
+
+### Step 2 — Detect PII
+
+```bash
+python part2_pii_detection.py customers_raw.csv
+```
+
+**Generates:** `pii_detection_report.txt`
+
+---
+
+### Step 3 — Validate the raw data
+
+```bash
+python part3_validator.py customers_raw.csv
+```
+
+**Generates:** `validation_results.txt`
+
+---
+
+### Step 4 — Clean the data
+
+```bash
+python part4_cleaning.py customers_raw.csv
+```
+
+**Generates:** `cleaning_log.txt`, `customers_cleaned.csv`
+
+---
+
+### Step 5 — Mask PII
+
+```bash
+python part5_masking.py customers_cleaned.csv
+```
+
+**Requires:** `customers_cleaned.csv` (from Step 4)
+**Generates:** `customers_masked.csv`, `masked_sample.txt`
+
+---
+
+### Step 6 — Run the full pipeline (all steps at once)
 
 ```bash
 python part6_pipeline.py customers_raw.csv .
 ```
 
-### Run each part individually
-
-```bash
-# Part 1 — Data quality profiling
-python part1_data_quality.py customers_raw.csv
-
-# Part 2 — PII detection
-python part2_pii_detection.py customers_raw.csv
-
-# Part 3 — Validation
-python part3_validator.py customers_raw.csv
-
-# Part 4 — Cleaning (generates customers_cleaned.csv)
-python part4_cleaning.py customers_raw.csv
-
-# Part 5 — PII masking (requires customers_cleaned.csv)
-python part5_masking.py customers_cleaned.csv
-```
+**Generates:** all of the above in one run, plus `pipeline_execution_report.txt`
 
 ---
 
@@ -98,14 +138,7 @@ pii-detection-data-quality-pipeline/
 ├── part5_masking.py                # Column-specific PII masking functions
 ├── part6_pipeline.py               # End-to-end orchestrator with logging
 │
-├── data_quality_report.txt         # Part 1 output — quality profile
-├── pii_detection_report.txt        # Part 2 output — PII inventory and risk
-├── validation_results.txt          # Part 3 output — per-row failure details
-├── cleaning_log.txt                # Part 4 output — all transformations applied
-├── customers_cleaned.csv           # Part 4 output — cleaned dataset
-├── masked_sample.txt               # Part 5 output — before/after comparison
-├── customers_masked.csv            # Part 5 output — PII-masked dataset
-├── pipeline_execution_report.txt   # Part 6 output — full run summary
+│   (output files are generated when you run the scripts — see How to Run)
 │
 ├── reflection.md                   # Governance, trade-offs, and lessons learned  → [read reflection](reflection.md)
 ├── requirements.txt
