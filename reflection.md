@@ -64,11 +64,11 @@
 
 ### Damage from a Breach
 A breach of this unmasked dataset would give attackers:
-- **Phishing campaigns** — full email list with names for targeted spear-phishing.
-- **Identity theft** — name + DOB + address satisfies most "knowledge-based authentication" questions used by banks and utilities.
-- **SIM-swap fraud** — phone number combined with personal details is sufficient to fool many carriers into transferring a phone number, enabling MFA bypass.
-- **Financial fraud** — income data enables targeted credit-card or loan fraud and reveals which customers are high-value targets.
-- **Regulatory liability** — a breach of this dataset without adequate protection could trigger fines under GDPR (up to 4% of global annual turnover), CCPA, or sector-specific regulations (PCI-DSS, GLBA).
+- **Phishing campaigns** full email list with names for targeted spear-phishing.
+- **Identity theft**  name + DOB + address satisfies most "knowledge-based authentication" questions used by banks and utilities.
+- **SIM-swap fraud** phone number combined with personal details is sufficient to fool many carriers into transferring a phone number, enabling MFA bypass.
+- **Financial fraud**  income data enables targeted credit-card or loan fraud and reveals which customers are high-value targets.
+- **Regulatory liability** a breach of this dataset without adequate protection could trigger fines under GDPR (up to 4% of global annual turnover), CCPA, or sector-specific regulations (PCI-DSS, GLBA).
 
 ---
 
@@ -85,16 +85,16 @@ A breach of this unmasked dataset would give attackers:
 
 ### When Masking Is Worth the Trade-off
 Masking is the right choice whenever data leaves a controlled environment:
-- **Analytics and data science** — business metrics (churn rate, average income by status) can be computed on masked data. The year of birth is sufficient for generation-level demographic analysis.
-- **External reporting or vendor sharing** — any third party (marketing agency, BI contractor) should receive masked data only.
-- **Testing and staging environments** — developers should never work with production PII.
-- **GDPR/CCPA compliance** — masked data can be shared across jurisdictions without triggering cross-border data transfer restrictions.
+- **Analytics and data science**  business metrics (churn rate, average income by status) can be computed on masked data. The year of birth is sufficient for generation-level demographic analysis.
+- **External reporting or vendor sharing**  any third party (marketing agency, BI contractor) should receive masked data only.
+- **Testing and staging environments** developers should never work with production PII.
+- **GDPR/CCPA compliance**  masked data can be shared across jurisdictions without triggering cross-border data transfer restrictions.
 
 ### When You Would NOT Mask
-- **Internal customer service** — agents need real names, emails, and phones to assist customers.
-- **Fraud investigation** — investigators need full PII to verify identity and trace transactions.
-- **Regulatory audits** — regulators may require access to the unmasked record.
-- **Marketing execution** — the team *sending* emails needs unmasked emails, but the analytics team reviewing open rates does not.
+- **Internal customer service** agents need real names, emails, and phones to assist customers.
+- **Fraud investigation**  investigators need full PII to verify identity and trace transactions.
+- **Regulatory audits** regulators may require access to the unmasked record.
+- **Marketing execution**  the team *sending* emails needs unmasked emails, but the analytics team reviewing open rates does not.
 
 The principle is **minimum necessary access**: mask by default, unmask only when there is a documented, audited business need.
 
@@ -114,18 +114,18 @@ The custom framework successfully identified:
 - Phone numbers with digit counts outside 10–15
 
 ### What They Missed
-- **Cross-column validation** — e.g., a customer aged 15 with income of $110,000 might be valid individually but implausible in combination.
-- **Email-domain validation** — the regex checks format but not whether the domain actually exists (DNS MX lookup).
-- **Duplicate records by non-ID fields** — two rows could have the same email and different IDs (soft duplicates).
-- **Statistical outliers** — income of $93,000 passes all rules but could still be an anomaly for a given customer segment.
-- **Referential integrity** — if this table links to a transactions table, orphaned foreign keys would not be detected.
+- **Cross-column validation**  e.g., a customer aged 15 with income of $110,000 might be valid individually but implausible in combination.
+- **Email-domain validation**  the regex checks format but not whether the domain actually exists (DNS MX lookup).
+- **Duplicate records by non-ID fields**  two rows could have the same email and different IDs (soft duplicates).
+- **Statistical outliers**  income of $93,000 passes all rules but could still be an anomaly for a given customer segment.
+- **Referential integrity**  if this table links to a transactions table, orphaned foreign keys would not be detected.
 
 ### How to Improve
-1. **Cross-column rules** — add composite validators (e.g., minimum plausible income given reported age).
+1. **Cross-column rules** add composite validators (e.g., minimum plausible income given reported age).
 2. **Regex + DNS MX lookup** for email validation in environments where external calls are allowed.
-3. **Fuzzy deduplication** — use edit-distance on name + address to catch soft duplicates that slipped through ID generation.
-4. **Statistical bounds** — fit income to a distribution per `account_status` tier and flag Z-score outliers (e.g., |Z| > 3).
-5. **Schema versioning** — store the validation ruleset alongside the data so auditors can see exactly which rules were applied to each batch.
+3. **Fuzzy deduplication**  use edit-distance on name + address to catch soft duplicates that slipped through ID generation.
+4. **Statistical bounds** fit income to a distribution per `account_status` tier and flag Z-score outliers (e.g., |Z| > 3).
+5. **Schema versioning** store the validation ruleset alongside the data so auditors can see exactly which rules were applied to each batch.
 
 ---
 
@@ -133,9 +133,9 @@ The custom framework successfully identified:
 
 ### Scheduling
 For a fintech ingestion pipeline processing customer sign-ups, a reasonable cadence is:
-- **Real-time / micro-batch** — validate each new record immediately at point of entry using the validation module as a library call inside the onboarding API.
-- **Daily batch** — run the full pipeline on the previous day's file drop at 02:00 UTC before business analytics need the data.
-- **On-demand re-scan** — triggered when a new validation rule is added, to retroactively find violations in historical data.
+- **Real-time / micro-batch**  validate each new record immediately at point of entry using the validation module as a library call inside the onboarding API.
+- **Daily batch**  run the full pipeline on the previous day's file drop at 02:00 UTC before business analytics need the data.
+- **On-demand re-scan**  triggered when a new validation rule is added, to retroactively find violations in historical data.
 
 ### Failure Handling
 | Scenario | Response |
@@ -172,7 +172,7 @@ The "age > 150" check also highlighted how easy it is for a database timestamp m
 Designing a per-column missing-value strategy that is both defensible and clearly documented proved more nuanced than simply calling `fillna()`. Each decision has a downstream impact: filling `account_status` with `"unknown"` means downstream queries must exclude that value from active-customer counts, or they will overcount.
 
 ### What Would Be Different Next Time
-1. **Agree on a data contract with the upstream source system before ingestion** — define expected formats, valid values, and null policies in a shared schema document. This eliminates many surprises at ingestion time.
-2. **Build the validator as a library, not a script** — so individual microservices can call `validate_record(row)` at write time rather than discovering problems hours later in a batch job.
-3. **Separate "flag for review" from "fix" actions** — a cleaning step that silently sets negative income to `0` could mask a systematic billing error upstream. In production, corrections should require human approval via a review queue.
-4. **Include data-lineage tracking from day one** — every transformation should record which rule was applied, by whom, and when, so the audit trail is complete if the data ever becomes evidence in a legal or regulatory proceeding.
+1. **Agree on a data contract with the upstream source system before ingestion** define expected formats, valid values, and null policies in a shared schema document. This eliminates many surprises at ingestion time.
+2. **Build the validator as a library, not a script**  so individual microservices can call `validate_record(row)` at write time rather than discovering problems hours later in a batch job.
+3. **Separate "flag for review" from "fix" actions**  a cleaning step that silently sets negative income to `0` could mask a systematic billing error upstream. In production, corrections should require human approval via a review queue.
+4. **Include data-lineage tracking from day one** every transformation should record which rule was applied, by whom, and when, so the audit trail is complete if the data ever becomes evidence in a legal or regulatory proceeding.
